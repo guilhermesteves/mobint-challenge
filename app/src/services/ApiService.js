@@ -33,6 +33,7 @@ module.exports = [
       // Trakt Headers
       $http.defaults.headers['trakt-api-key'] = TRACKT.apiKey;
       $http.defaults.headers['trakt-api-version'] = 2;
+      $http.defaults.headers.common['Content-Type'] = 'application/json';
 
       // public api
       return {
