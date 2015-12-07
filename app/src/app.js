@@ -70,21 +70,11 @@ angular.module( 'MobintChallenge', [
             controller: 'SettingsController'
           }
         }
-      })
-      .state('topShows', {
-        url: '/top-shows',
-        abstract: true,
-        views: {
-          'viewContent': {
-            templateUrl: 'templates/views/top-shows.html',
-            controller: 'topShowsController'
-          }
-        }
       });
 
 
     // redirects to default route for undefined routes
-    $urlRouterProvider.otherwise('/top-shows');
+    $urlRouterProvider.otherwise('/app/home');
   }
 ] )
 
@@ -93,10 +83,9 @@ angular.module( 'MobintChallenge', [
 .controller( 'MainController',     require( './controllers/mainController'     ) )
 .controller( 'HomeController',     require( './controllers/homeController'     ) )
 .controller( 'SettingsController', require( './controllers/settingsController' ) )
-.controller( 'SettingsController', require( './controllers/topShowsController' ) )
 
 // Angular module services
 //
-.factory( 'ExampleService',        require( './services/TracktService' ) )
+.factory( 'TracktService',         require( './services/TracktService'  ) )
 .factory( 'ApiService',            require( './services/ApiService'     ) )
 ;

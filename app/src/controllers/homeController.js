@@ -8,23 +8,25 @@
  */
 module.exports = [
     '$scope',
-    'ExampleService',
+    'TracktService',
 
-    function( $scope, ExampleService )
+    function( $scope, TracktService )
     {
-      $scope.myHTML = null;
+      $scope.topShows = [];
 
-      // just an example...
-      $scope.fetchRandomText = function() {
-        ExampleService.doSomethingAsync()
-          .then(ExampleService.fetchSomethingFromServer)
+      $scope.fetchTopShows = function() {
+        TracktService.fetchTopShows()
           .then(function(response) {
-              $scope.myHTML = response.data.text;
-              // close pull to refresh loader
-              $scope.$broadcast('scroll.refreshComplete');
+
+            if (response.data) {
+              $scope.topShows = response.data;
+            }
+
+            // close pull to refresh loader
+            $scope.$broadcast('scroll.refreshComplete');
           });
       };
 
-      $scope.fetchRandomText();
+      $scope.fetchTopShows();
     }
 ];
