@@ -9,8 +9,9 @@
 angular.module('MobintChallenge')
   .controller('HomeController', function($scope, TracktService) {
 
-    $scope.myHTML = null;
+    $scope.myHTML   = null;
     $scope.topShows = [];
+    $scope.page     = 1;
 
     $scope.fetchTopShows = function() {
       TracktService.fetchTopShows()
@@ -18,6 +19,13 @@ angular.module('MobintChallenge')
 
           if (response.data) {
             $scope.topShows = response.data;
+            $scope.page += 1;
+          } else {
+            $scope.myHTML = 'Indisponível';
+          }
+
+          if (response.headers['X-Pagination-Page-Count']) {
+            $scope.totalPages = response.headers['X-Pagination-Page-Count'];
           }
 
           $scope.$broadcast('scroll.refreshComplete');

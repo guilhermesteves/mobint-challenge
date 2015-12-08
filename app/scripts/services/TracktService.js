@@ -10,16 +10,17 @@ angular.module('MobintChallenge')
   // use factory for services
   .factory('TracktService', function($http, $timeout, $q, TRACKT) {
 
-    var fetchTopShows = function() {
+    var fetchTopShows = function(page) {
       return $http({
-          url: 'https://api-v2launch.trakt.tv',
+          url: 'https://api-v2launch.trakt.tv' + '/shows/popular',
           headers: {
             'trakt-api-key':      TRACKT.apiKey,
             'trakt-api-version':  TRACKT.version,
             'Content-Type':       'application/json'
           },
           params: {
-              paras: 2
+            page:   page || 1,
+            limit:  10
           },
           method: 'GET'
         })
