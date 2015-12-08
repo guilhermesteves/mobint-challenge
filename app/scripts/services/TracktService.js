@@ -19,8 +19,9 @@ angular.module('MobintChallenge')
             'Content-Type':       'application/json'
           },
           params: {
-            page:   page || 1,
-            limit:  10
+            page:     page || 1,
+            limit:    10,
+            extended: 'full,images'
           },
           method: 'GET'
         })
