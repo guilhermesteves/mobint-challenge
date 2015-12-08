@@ -14,10 +14,21 @@ angular.module('MobintChallenge')
 
   // development
   .constant('API_ENDPOINT', {
-    host: 'https://api-v2launch.trakt.tv',
+    host: 'http://localhost',
+    port: 3000,
+    path: '',
     needsAuth: false
-  })
-  .constant('TRACKT', {
-    apiKey: '6aa9d371decb2ccdc37cda1a4211be9ce04ed9848730c250247e3e1ea826777c'
   });
+
+
+  // live example with HTTP Basic Auth
+  /*
+  .constant('API_ENDPOINT', {
+    host: 'http://yourserver.com',
+    path: '/api/v2',
+    needsAuth: true,
+    username: 'whatever',
+    password: 'foobar'
+  });
+  */
 

@@ -15,12 +15,6 @@ var streamqueue = require('streamqueue');
 var runSequence = require('run-sequence');
 var merge = require('merge-stream');
 var ripple = require('ripple-emulator');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
-var gutil = require('gulp-util');
 
 /**
  * Parse arguments
@@ -65,7 +59,7 @@ var errorHandler = function(error) {
 
 // clean target dir
 gulp.task('clean', function(done) {
-  del([targetDir, 'app/scripts/bundle.js','app/scripts/bundle.js.map'], done);
+  del([targetDir], done);
 });
 
 // precompile .scss and concat with ionic.css
@@ -100,28 +94,10 @@ gulp.task('styles', function() {
     .on('error', errorHandler);
 });
 
-// bundle all the src files into scripts/bundle.js
-gulp.task('browserify', function () {
-  // set up the browserify instance on a task basis
-  var b = browserify({
-    entries: './app/src/app.js',
-    debug: !build
-  });
-
-  return b.bundle()
-    .pipe(source('bundle.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
-        // Add transformation tasks to the pipeline here.
-        .pipe(uglify())
-        .on('error', gutil.log)
-    .pipe(plugins.if(!build,sourcemaps.write('./')))
-    .pipe(gulp.dest('./app/scripts/'));
-});
 
 // build templatecache, copy scripts.
 // if build: concat, minsafe, uglify and versionize
-gulp.task('scripts', ['browserify'], function() {
+gulp.task('scripts', function() {
   var dest = path.join(targetDir, 'scripts');
 
   var minifyConfig = {
@@ -142,7 +118,7 @@ gulp.task('scripts', ['browserify'], function() {
     }));
 
   var scriptStream = gulp
-    .src( ['bundle.js', 'bundle.js.map', 'configuration.js', 'templates.js' ], { cwd: 'app/scripts' })
+    .src(['templates.js', 'app.js', '**/*.js'], { cwd: 'app/scripts' })
 
     .pipe(plugins.if(!build, plugins.changed(dest)));
 
@@ -205,12 +181,14 @@ gulp.task('images', function() {
 
 
 // lint js sources based on .jshintrc ruleset
-gulp.task('jsHint', function() {
+gulp.task('jsHint', function(done) {
   return gulp
-    .src('app/src/**/*.js')
+    .src('app/scripts/**/*.js')
     .pipe(plugins.jshint())
     .pipe(plugins.jshint.reporter(stylish))
+
     .on('error', errorHandler);
+    done();
 });
 
 // concatenate and minify vendor sources
@@ -324,11 +302,10 @@ gulp.task('watchers', function() {
   gulp.watch('app/fonts/**', ['fonts']);
   gulp.watch('app/icons/**', ['iconfont']);
   gulp.watch('app/images/**', ['images']);
-  gulp.watch(['app/scripts/**/*.js','!app/scripts/bundle.js'], ['index']);
+  gulp.watch('app/scripts/**/*.js', ['index']);
   gulp.watch('./vendor.json', ['vendor']);
   gulp.watch('app/templates/**/*.html', ['index']);
   gulp.watch('app/index.html', ['index']);
-  gulp.watch('app/src/**/*.js', ['scripts']);
   gulp.watch(targetDir + '/**')
     .on('change', plugins.livereload.changed)
     .on('error', errorHandler);

@@ -6,11 +6,9 @@
  * @description
  * # MainController
  */
-module.exports = [
-    '$scope',
+angular.module('MobintChallenge')
+  .controller('MainController', function($scope) {
 
-    function( $scope )
-    {
-        // do something with $scope
-    }
-];
+    // do something with $scope
+
+  });
