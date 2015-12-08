@@ -6,11 +6,9 @@
  * @description
  * # SettingsController
  */
-module.exports = [
-    '$scope',
+angular.module('MobintChallenge')
+  .controller('SettingsController', function($scope) {
 
-    function( $scope )
-    {
-        // do something with $scope
-    }
-];
+    // do something with $scope
+
+  });
