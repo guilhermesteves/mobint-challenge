@@ -1,19 +1,30 @@
-<ion-view>
-    <ion-header-bar align-title="center" class="bar-positive">
-    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
-        <h1 class="title">mobint-challenge</h1>
-    </ion-header-bar>
+<ion-view view-title="Top Shows">
+  <ion-header-bar align-title="center" class="bar-positive">
+  <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+    <h1 class="title">mobint-challenge</h1>
+  </ion-header-bar>
 
-    <ion-content>
-        <ion-refresher
-            pulling-text="Pull to refresh..."
-            on-refresh="fetchRandomText()">
-        </ion-refresher>
-        <div class="loader" ng-if="!myHTML">
-            <ion-spinner></ion-spinner>
+  <ion-content class="galleries-view ">
+    <ion-refresher
+          pulling-text="Atualizar..."
+          on-refresh="fetchTopShows()">
+    </ion-refresher>
+    <div class="row galleries-list">
+      <div ng-repeat="show in topShows track by $index" class="col col-50">
+        <img class="gallery-image" ng-src="{{show.images.thumb.full}}" />
+        <div class="gallery-bg"></div>
+        <div class="gallery-title">
+          <h5>{{show.title}}</h5>
+          <h6>Ano: {{show.year}}</h6>
         </div>
-        <div class="content" ng-bind-html="myHTML">
-        </div>
-    </ion-content>
-
+      </div>
+    </div>
+    <div class="no-more" ng-if="topShows == [] || end || loading">
+      <p>Isso é tudo, pe-pe-pessoal. :)</p>
+    </div>
+    <div class="loader" ng-if="topShows == [] && !end">
+      <ion-spinner></ion-spinner>
+    </div>
+    <ion-infinite-scroll on-infinite="fetchMore()" ng-if="!end" distance="5%"></ion-infinite-scroll>
+  </ion-content>
 </ion-view>
